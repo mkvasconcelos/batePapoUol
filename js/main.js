@@ -24,3 +24,13 @@ setInterval((function (){
         return response.status;
     });
 }),5000);
+
+let search_messages = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
+search_messages.then(function success(response){
+    console.log(response.data);
+    return response.status;
+});
+search_messages.catch(function failure(response){
+    console.log(response);
+    return response.status;
+});
