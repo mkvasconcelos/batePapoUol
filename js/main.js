@@ -1,8 +1,6 @@
 const main = document.querySelector("main");
+const footer = document.querySelector("footer");
 let ul = main.children[0];
-// let date = new Date().toJSON().split("T")[1].split(".")[0];
-// let date_hour = Number(date.split(":")[0]);
-// let date_minute = Number(date.split(":")[1]);
 
 let trigger = 400;
 // while(trigger !== 200){
@@ -10,11 +8,10 @@ const participant = prompt("Qual seu nome de usuário?");
 let participant_object = {'name':participant};
 const enter_room = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants',participant_object);
 enter_room.then(function success(response){
-    console.log(response.status);
     return response.status;
 });
 enter_room.catch(function failure(response){
-    console.log(response.status);
+    console.log("falha", response);
     return response.status;
 });
 // }
@@ -22,39 +19,36 @@ enter_room.catch(function failure(response){
 const stay_online_interval= setInterval((function (){
     const stay_online = axios.post('https://mock-api.driven.com.br/api/v6/uol/status',participant_object);
     stay_online.then(function success(response){
-        // console.log(response.status);
         return response.status;
     });
     stay_online.catch(function failure(response){
-        // console.log(response.status);
+        console.log("falha", response);
         return response.status;
     });
 }),5000);
 
-let last_message = "";
+let last_message = ["","","","",""];
 const search_messages_interval= setInterval((function (){
     let search_messages = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
     search_messages.then(function success(response){
-        let current_message = response.data[response.data.length-1];
+        let current_message = [response.data[response.data.length-1].from, response.data[response.data.length-1].to, response.data[response.data.length-1].text, response.data[response.data.length-1].type, response.data[response.data.length-1].time];
         console.log(current_message);
         console.log(last_message);
-        console.log(current_message === last_message);
-        // for(let i = 0; i < response.data.length; i++){
-        //     if(search_name(response.data[i],participant)){
-        //         add_messages(response.data[i]);
-        //     }
-        // }
-        if (current_message != last_message){
+        console.log(current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]);
+        if (current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]){
+            return response.data;
+        }
+        else {
             if(search_name(response.data[response.data.length-1],participant)){
                 add_messages(response.data[response.data.length-1]);
             }
-            last_message = current_message;
+            for(let i = 0; i < current_message.length; i++){
+                last_message[i] = current_message[i];
+            }  
         }
-        
-        return response.data;
     });
     search_messages.catch(function failure(response){
-        // console.log(response);
+        console.log("falha", response);
         return response.status;
     });
 }),5000);
@@ -66,10 +60,12 @@ function add_messages(object){
             <p><span class="time">(${object.time})</span> <span>${object.from}</span> ${object.text}</p> 
         </li>`
     } else if (object.type === 'message'){
+        ul.innerHTML +=
         `<li>
             <p><span class="time">(${object.time})</span> <span>${object.from}</span> para <span>${object.to}</span>: ${object.text}</p> 
         </li>`
     } else{
+        ul.innerHTML +=
         `<li class=${object.type}>
             <p><span class="time">(${object.time})</span> <span>${object.from}</span> reservadamente para <span>${object.to}</span>: ${object.text}</p> 
         </li>`  
@@ -77,23 +73,27 @@ function add_messages(object){
 }
 
 function search_name(object, name){
-    // const hour = Number(object.time.split(":")[0]);
-    // const minute = Number(object.time.split(":")[1]);
     if(object.from === name || object.to === 'Todos' || object.to === name){
         return true;
     };
     return false;
 }
 
-// function formatAMPM(date) {
-//     var hours = date.getHours();
-//     var minutes = date.getMinutes();
-//     var ampm = hours >= 12 ? 'pm' : 'am';
-//     hours = hours % 12;
-//     hours = hours ? hours : 12; // the hour '0' should be '12'
-//     minutes = minutes < 10 ? '0'+minutes : minutes;
-//     var strTime = hours + ':' + minutes + ' ' + ampm;
-//     return strTime;
-//   }
-  
-//   console.log(formatAMPM(new Date));
+function send_messages(){
+    const message = footer.children[0].value;
+    let message_object = {'from': participant, 'to': 'Todos', 'text': message, 'type': 'message'};
+    const message_api = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages",message_object);
+    message_api.then(function success(response){
+        console.log(response);
+        clear_message();
+        return response;
+    });
+    message_api.catch(function failure(response){
+        console.log("falha", response);
+        return response;
+    });
+}
+
+function clear_message(){
+    return footer.children[0].value = "";
+}

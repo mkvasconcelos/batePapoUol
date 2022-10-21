@@ -45,8 +45,36 @@ footer{
     max-width: inherit;
     height: 80px;
     position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     bottom: 0;
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
+}
+
+footer input{
+    border: none;
+    height: 100%;
+    width: 100%;
+    padding: 0 0 0 17px;
+    color: #000000;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+footer ion-icon{
+    font-size: 26px;    
+    position: fixed;
+    right: 18px;
+    bottom: 27px;
+}
+
+::placeholder{
+    color: #000000;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Roboto';
+    font-style: italic;
 }
 
 .private_message{
