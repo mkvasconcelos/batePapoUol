@@ -32,9 +32,9 @@ const search_messages_interval= setInterval((function (){
     let search_messages = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
     search_messages.then(function success(response){
         let current_message = [response.data[response.data.length-1].from, response.data[response.data.length-1].to, response.data[response.data.length-1].text, response.data[response.data.length-1].type, response.data[response.data.length-1].time];
-        console.log(current_message);
-        console.log(last_message);
-        console.log(current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]);
+        // console.log(current_message);
+        // console.log(last_message);
+        // console.log(current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]);
         if (current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]){
             return response.data;
         }
@@ -51,7 +51,7 @@ const search_messages_interval= setInterval((function (){
         console.log("falha", response);
         return response.status;
     });
-}),5000);
+}),3000);
 
 function add_messages(object){
     if (object.type === 'status'){
@@ -84,7 +84,6 @@ function send_messages(){
     let message_object = {'from': participant, 'to': 'Todos', 'text': message, 'type': 'message'};
     const message_api = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages",message_object);
     message_api.then(function success(response){
-        console.log(response);
         clear_message();
         return response;
     });
@@ -97,3 +96,11 @@ function send_messages(){
 function clear_message(){
     return footer.children[0].value = "";
 }
+
+const input = footer.children[0];
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    footer.children[1].click();
+  }
+});
