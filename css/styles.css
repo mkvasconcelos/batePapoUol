@@ -1,6 +1,7 @@
 html{
     max-width: 400px;
     height: 100%;
+    background-color: #E5E5E5;
 }
 
 body{
@@ -41,9 +42,13 @@ header img{
 main{
     background-color: #E5E5E5;
     width: 100%;
-    height: 100%;
-    margin: 80px 0;
+    padding: 80px 0;
+}
+
+main ul {
     padding-top: 30px;
+    padding-bottom: 30px;
+    height: auto;
 }
 
 li{
@@ -65,27 +70,40 @@ footer{
     height: 80px;
     position: fixed;
     display: flex;
-    justify-content: center;
-    align-items: center;
     bottom: 0;
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
 }
 
+footer div{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
 footer input{
     border: none;
-    height: 100%;
-    width: 100%;
+    height: 50%;
+    width: 90%;
     padding: 0 0 0 17px;
-    color: #000000;
     font-size: 18px;
+    color: #000000;
     font-weight: 400;
 }
 
 footer ion-icon{
-    font-size: 26px;    
-    position: fixed;
-    right: 18px;
-    bottom: 27px;
+    font-size: 26px; 
+    margin: 27px 18px 27px 0; 
+}
+
+footer p{
+    padding: 0 0 0 17px; 
+    text-align: start;
+    font-size: 14px;
+    font-weight: 300;
+    color: #505050;
 }
 
 .right_side{
@@ -120,18 +138,30 @@ footer ion-icon{
     font-size: 16px;
     font-weight: 400;
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    word-break: break-word;
 }
 
 .right_side ion-icon{
     font-size: 24px;
+    width: 30px;
+}
+
+.right_side ul {
+    width: 100%;
 }
 
 .right_side li{
+    width: 85%;
     display: flex;
     align-items: center;
+    justify-content: space-around;
     padding: 0;
     margin-left: 10px;
     margin-bottom: 10px;
+}
+
+aside:nth-child(0) > h1 {
+    display: none;
 }
 
 .left_side{
@@ -142,6 +172,12 @@ footer ion-icon{
     height: 100%;
     width: 40%;
     background: rgba(0, 0, 0, 0.6);
+}
+
+#check{
+    font-size: 14px;
+    font-weight: bold;
+    color: #28BB25;
 }
 
 ::placeholder{
@@ -167,4 +203,12 @@ footer ion-icon{
 
 .sidebar_on{
     display: flex;
+}
+
+.check_off{
+    display: none;
+}
+
+.check_on{
+    display: block;
 }
