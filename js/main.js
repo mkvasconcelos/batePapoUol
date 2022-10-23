@@ -4,25 +4,27 @@ const footer = document.querySelector("footer");
 const aside_right = document.querySelector('.right_side');
 const aside_left = document.querySelector('.left_side');
 let ul = main.children[0];
+let participant = "";
 
-let trigger = 400;
-// while(trigger !== 200){
-    const participant = prompt("Qual seu nome de usuário?");
-    let participant_object = {'name':participant};
-    const enter_room = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants',participant_object);
+start_chat();
+
+function start_chat(){
+    participant = prompt("Qual seu nome de usuário?");
+    const enter_room = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants',{'name':participant});
     enter_room.then(function success(response){
-        add_participant(participant);
+        add_participant();
         return response.status;
     });
     enter_room.catch(function failure(response){
         alert("Nome já em uso.");
         console.log("falha", response);
+        start_chat();
         return response.status;
     });
-// }
+}
 
 const stay_online_interval= setInterval((function (){
-    const stay_online = axios.post('https://mock-api.driven.com.br/api/v6/uol/status',participant_object);
+    const stay_online = axios.post('https://mock-api.driven.com.br/api/v6/uol/status',{'name':participant});
     stay_online.then(function success(response){
         return response.status;
     });
@@ -31,6 +33,8 @@ const stay_online_interval= setInterval((function (){
         return response.status;
     });
 }),5000);
+
+const participant_online_interval = setInterval(add_participant,10000);;
 
 let last_message = ["","","","",""];
 const search_messages_interval= setInterval((function (){
@@ -58,27 +62,25 @@ const search_messages_interval= setInterval((function (){
     });
 }),3000);
 
-function get_status(status){
-    trigger = status;
-    return trigger;
-}
-
 function add_messages(object){
     if (object.type === 'status'){
         ul.innerHTML += 
         `<li class=${object.type}>
             <p><span class="time">(${object.time})</span> <span>${object.from}</span> ${object.text}</p> 
         </li>`
+        
     } else if (object.type === 'message'){
         ul.innerHTML +=
         `<li>
             <p><span class="time">(${object.time})</span> <span>${object.from}</span> para <span>${object.to}</span>: ${object.text}</p> 
         </li>`
+        
     } else{
         ul.innerHTML +=
         `<li class=${object.type}>
             <p><span class="time">(${object.time})</span> <span>${object.from}</span> reservadamente para <span>${object.to}</span>: ${object.text}</p> 
         </li>`  
+        
     }
 }
 
@@ -112,21 +114,29 @@ function participant_online(){
     aside_left.classList.toggle('sidebar_on');
 }
 
-function add_participant(participant){
+function add_participant(){
     const ul_aside = aside_right.children[1].children[0];
-    console.log(ul_aside);
-    ul_aside.innerHTML += 
+    ul_aside.innerHTML = 
     `<li>
-        <ion-icon name="person-circle-outline"></ion-icon>
-        <h2>${participant}</h2>
+        <ion-icon name="people"></ion-icon>
+        <h2>Todos</h2>
     </li>`;
+    const inside_room = axios.get('https://mock-api.driven.com.br/api/v6/uol/participants');
+    inside_room.then(function success(response){
+        for(let i = 0; i < response.data.length; i++){
+            ul_aside.innerHTML += 
+            `<li>
+                <ion-icon name="person-circle-outline"></ion-icon>
+                <h2>${response.data[i].name}</h2>
+            </li>`; 
+        }
+        return response.status;
+    });
+    inside_room.catch(function failure(response){
+        console.log("falha", response);
+        return response.status;
+    });
 }
-
-function who_is_online(){
-    console.log(aside_right);
-}
-
-who_is_online;
 
 const input = footer.children[0];
 input.addEventListener("keypress", function(event) {
