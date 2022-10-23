@@ -1,6 +1,8 @@
 const header = document.querySelector("header");
 const main = document.querySelector("main");
 const footer = document.querySelector("footer");
+const aside_right = document.querySelector('.right_side');
+const aside_left = document.querySelector('.left_side');
 let ul = main.children[0];
 
 let trigger = 400;
@@ -9,6 +11,7 @@ let trigger = 400;
     let participant_object = {'name':participant};
     const enter_room = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants',participant_object);
     enter_room.then(function success(response){
+        add_participant(participant);
         return response.status;
     });
     enter_room.catch(function failure(response){
@@ -105,11 +108,25 @@ function clear_message(){
 }
 
 function participant_online(){
-    const aside_right = document.querySelector('.right_side');
-    const aside_left = document.querySelector('.left_side');
     aside_right.classList.toggle('sidebar_on');
     aside_left.classList.toggle('sidebar_on');
 }
+
+function add_participant(participant){
+    const ul_aside = aside_right.children[1].children[0];
+    console.log(ul_aside);
+    ul_aside.innerHTML += 
+    `<li>
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <h2>${participant}</h2>
+    </li>`;
+}
+
+function who_is_online(){
+    console.log(aside_right);
+}
+
+who_is_online;
 
 const input = footer.children[0];
 input.addEventListener("keypress", function(event) {
