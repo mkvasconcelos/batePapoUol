@@ -15,7 +15,7 @@
     <header>
         <div>
             <img src="img/logo 1.jpg" alt="">
-            <a onclick="send_messages()"><ion-icon name="people"></ion-icon></a>
+            <a onclick="participant_online()"><ion-icon name="people"></ion-icon></a>
         </div>
     </header>
     <main>
@@ -25,6 +25,35 @@
         <input type="text" placeholder="Escreva aqui...">
         <a onclick="send_messages()"><ion-icon name="paper-plane-outline"></ion-icon></a>
     </footer>
+    <aside class="right_side">
+        <h1>
+            Escolha um contato para enviar mensagem:
+        </h1>
+        <div>
+            <ul>
+                <li>
+                    <ion-icon name="people"></ion-icon>
+                    <h2>Todos</h2>
+                </li>
+            </ul>
+        </div>
+        <h1>
+            Escolha a visibilidade:
+        </h1>
+        <div>
+            <ul>
+                <li>
+                    <ion-icon name="lock-open"></ion-icon>
+                    <h2>Público</h2>
+                </li>
+                <li>
+                    <ion-icon name="lock-closed"></ion-icon>
+                    <h2>Reservadamente</h2>
+                </li>
+            </ul>
+        </div>
+    </aside>
+    <aside onclick="participant_online()" class="left_side"></aside>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="js/main.js"></script>
