@@ -110,7 +110,8 @@ footer p{
     position: fixed;
     top: 0;
     height: 100%;
-    right: 0;
+    right: calc(100vw - 400px);
+    max-width: 240px;
     width: 60%;
     background-color: #FFFFFF;
     display: none;
@@ -170,6 +171,7 @@ aside:nth-child(0) > h1 {
     left: 0;
     display: none;
     height: 100%;
+    max-width: 160px;
     width: 40%;
     background: rgba(0, 0, 0, 0.6);
 }
@@ -184,7 +186,7 @@ aside:nth-child(0) > h1 {
     color: #000000;
     font-size: 18px;
     font-weight: 400;
-    font-family: 'Roboto';
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
     font-style: italic;
 }
 

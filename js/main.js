@@ -87,7 +87,7 @@ function add_messages(object){
 }
 
 function search_name(object, name){
-    if(object.from === name || object.to === 'Todos' || object.to === name){
+    if(object.from === name || object.to === 'Todos' || object.to === name || object.type === 'message'){
         return true;
     };
     return false;
