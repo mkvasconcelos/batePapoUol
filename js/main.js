@@ -1,68 +1,80 @@
 const header = document.querySelector("header");
 const main = document.querySelector("main");
 const footer = document.querySelector("footer");
+const section = document.querySelector("section");
 const aside_right = document.querySelector('.right_side');
 const aside_left = document.querySelector('.left_side');
 let ul = main.children[0];
 let participant = "";
-let list_message = [{"id": "", "value": "Todos"},{"id":aside_right.children[3].children[0].children[0].children[1], "value": "message"}] 
-
-start_chat();
+let list_message = [{"id": "", "value": "Todos"},{"id":aside_right.children[3].children[0].children[0].children[1], "value": "message"}];
 
 function start_chat(){
-    participant = prompt("Qual seu nome de usuário?");
+    participant = section.children[1].children[0].value;
     const enter_room = axios.post('https://mock-api.driven.com.br/api/v6/uol/participants',{'name':participant});
     enter_room.then(function success(response){
+        section.children[1].classList.add("check_off");
+        section.children[2].classList.remove("check_off");
         add_participant();
-        list_message[0].id = document.querySelector('.todos');
+        section.classList.add("check_off");
+        stay_online_interval();
+        participant_online_interval();
+        search_messages_interval();
         return response.status;
     });
     enter_room.catch(function failure(response){
         alert("Nome já em uso.");
+        participant = prompt("Digite seu nome");
+        section.children[1].children[0].value = participant;
         console.log("falha", response);
-        start_chat();
+        setTimeout(start_chat(),100000);
         return response.status;
     });
 }
 
-const stay_online_interval= setInterval((function (){
-    const stay_online = axios.post('https://mock-api.driven.com.br/api/v6/uol/status',{'name':participant});
-    stay_online.then(function success(response){
-        return response.status;
-    });
-    stay_online.catch(function failure(response){
-        console.log("falha", response);
-        return response.status;
-    });
-}),5000);
+function stay_online_interval(){
+    setInterval((function (){
+        const stay_online = axios.post('https://mock-api.driven.com.br/api/v6/uol/status',{'name':participant});
+        stay_online.then(function success(response){
+            return response.status;
+        });
+        stay_online.catch(function failure(response){
+            console.log("falha", response);
+            return response.status;
+        });
+    }),5000);
+}
 
-const participant_online_interval = setInterval(add_participant,10000);;
+function participant_online_interval(){
+    setInterval(add_participant,10000);;
+}
 
-let last_message = ["","","","",""];
-const search_messages_interval= setInterval((function (){
-    let search_messages = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
-    search_messages.then(function success(response){
-        let current_message = [response.data[response.data.length-1].from, response.data[response.data.length-1].to, response.data[response.data.length-1].text, response.data[response.data.length-1].type, response.data[response.data.length-1].time];
-        // console.log(current_message);
-        // console.log(last_message);
-        // console.log(current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]);
-        if (current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]){
-            return response.data;
-        }
-        else {
-            if(search_name(response.data[response.data.length-1],participant)){
-                add_messages(response.data[response.data.length-1]);
+function search_messages_interval(){
+    let last_message = ["","","","",""];
+    setInterval((function (){
+        let search_messages = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
+        search_messages.then(function success(response){
+            let current_message = [response.data[response.data.length-1].from, response.data[response.data.length-1].to, response.data[response.data.length-1].text, response.data[response.data.length-1].type, response.data[response.data.length-1].time];
+            // console.log(current_message);
+            // console.log(last_message);
+            // console.log(current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]);
+            if (current_message[0] === last_message[0] && current_message[1] === last_message[1] && current_message[2] === last_message[2] && current_message[3] === last_message[3] && current_message[4] === last_message[4]){
+                return response.data;
             }
-            for(let i = 0; i < current_message.length; i++){
-                last_message[i] = current_message[i];
-            }  
-        }
-    });
-    search_messages.catch(function failure(response){
-        console.log("falha", response);
-        return response.status;
-    });
-}),3000);
+            else {
+                if(search_name(response.data[response.data.length-1],participant)){
+                    add_messages(response.data[response.data.length-1]);
+                }
+                for(let i = 0; i < current_message.length; i++){
+                    last_message[i] = current_message[i];
+                }  
+            }
+        });
+        search_messages.catch(function failure(response){
+            console.log("falha", response);
+            return response.status;
+        });
+    }),3000);
+}
 
 function add_messages(object){
     if (object.type === 'status'){
@@ -136,7 +148,7 @@ function add_participant(){
                     <ion-icon name="person-circle-outline"></ion-icon>
                     <h2>${response.data[i].name}</h2>
                 </div>
-                <ion-icon id="check" name="checkmark-outline"></ion-icon>
+                <ion-icon class="check_off" id="check" name="checkmark-outline"></ion-icon>
             </li>`; 
         }
         return response.status;
@@ -151,13 +163,13 @@ function select_participant(type){
     const div_chosen = type.parentNode.parentNode.parentNode;
     const icon = type.parentNode.children[1];
     if (div_chosen === aside_right.children[1]){
-        console.log(list_message[0].id);
-        console.log(list_message[0].id.parentNode);
-        list_message[0].id.classList.toggle("check_on");
-        icon.classList.toggle("check_on");
+        for(let i = 0; i < div_chosen.children[0].children.length; i++){
+            div_chosen.children[0].children[i].children[1].classList.add("check_off");
+        }
+        icon.classList.remove("check_off");
         list_message[0].id = icon;
         list_message[0].value = type.children[1].innerText;
-        footer.children[0].children[1].children[0].innerText = type.children[1].innerText;;
+        footer.children[0].children[1].children[0].innerText = type.children[1].innerText;
     } else {
         list_message[1].id.classList.toggle("check_off");
         icon.classList.toggle("check_off");
@@ -169,14 +181,23 @@ function select_participant(type){
             list_message[1].value = "private_message";
             footer.children[0].children[1].children[1].innerText = "reservadamente";
         }
-        console.log(list_message);
     }
 }
+
+// Key enter works as a click!!!
 
 const input = footer.children[0].children[0];
 input.addEventListener("keypress", function(event) {
   if (event.key === "Enter") {
     event.preventDefault();
     footer.children[1].click();
+  }
+});
+
+const input_section = section.children[1].children[0];
+input_section.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    section.children[1].children[1].click();
   }
 });

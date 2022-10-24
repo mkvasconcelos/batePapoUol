@@ -4,6 +4,10 @@ html{
     background-color: #E5E5E5;
 }
 
+a:hover{
+    cursor: pointer;  
+}
+
 body{
     width: 100%;
     height: 100%;
@@ -106,6 +110,57 @@ footer p{
     color: #505050;
 }
 
+section{
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    background-color: #FFFFFF;
+}
+
+section img {
+    margin-top: 72px;
+}
+
+section div{
+    margin-top: 94px;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+}
+
+section input {
+    width: 261px;
+    height: 54px;
+    border: 1px solid #D7D7D7;
+    border-radius: 4px;
+    font-size: 18px;
+    text-align: center;
+}
+
+section ::placeholder{
+    color: #AEAEAE;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+}
+
+section button {
+    margin-top: 15px;
+    width: 109px;
+    height: 45px;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    color: #696969;
+}
+
 .right_side{
     position: fixed;
     top: 0;
@@ -125,6 +180,10 @@ footer p{
     justify-content: flex-start;
     width: 100%;
     padding-left: 10px;
+}
+
+.right_side div:hover{
+    cursor: pointer;
 }
 
 .right_side h1{
@@ -159,10 +218,6 @@ footer p{
     padding: 0;
     margin-left: 10px;
     margin-bottom: 10px;
-}
-
-aside:nth-child(0) > h1 {
-    display: none;
 }
 
 .left_side{
@@ -211,6 +266,7 @@ aside:nth-child(0) > h1 {
     display: none;
 }
 
-.check_on{
-    display: block;
+.loading{
+    width: 100%;
+    max-width: 400px;
 }
