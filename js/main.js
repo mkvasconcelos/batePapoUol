@@ -26,7 +26,7 @@ function start_chat(){
         participant = prompt("Digite seu nome");
         section.children[1].children[0].value = participant;
         console.log("falha", response);
-        setTimeout(start_chat(),100000);
+        setTimeout(start_chat,100000);
         return response.status;
     });
 }
